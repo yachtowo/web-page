@@ -8,7 +8,7 @@ import {ContactComponent} from '../components/contact/contact.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, HeaderComponent, HomeComponent, GalleryComponent, ServicesComponent, ContactComponent],
+  imports: [HeaderComponent, HomeComponent, GalleryComponent, ServicesComponent, ContactComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
