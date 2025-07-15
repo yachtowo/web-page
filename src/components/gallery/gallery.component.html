@@ -1,0 +1,64 @@
+<section class="relative w-full" style="background: var(--background-5)">
+  <div id="gallery" class="text-4xl xl:text-5xl font-bold text-center text-white pt-10 xl:pt-20">
+    Nasze projekty
+  </div>
+  <div class="flex gap-10 overflow-x-auto scroll-smooth py-10 xl:py-20 px-10 xl:px-20 snap-mandatory">
+    @for (src of images; track src) {
+
+      @if (src.length) {
+        <img [src]="src"
+             (click)="open(src)"
+             class="h-100 w-auto flex-shrink-0 cursor-pointer rounded-xl shadow-md transition-transform duration-300 hover:scale-110 snap-start"
+             alt="image"/>
+      } @else {
+        <div (click)="open(src)"
+             class="h-100 w-[100vw] md:w-100 flex-shrink-0 rounded-xl shadow-md relative
+             flex items-center justify-center text-center snap-start
+              hover:brightness-120
+             transition-transform duration-300 hover:scale-110 cursor-pointer"
+             style="background: var(--background-2)">
+          <img src="assets/gallery.png" alt="gallery" class="w-20 mb-20 mx-auto"/>
+
+          <span class="absolute bottom-25 left-1/2 -translate-x-1/2 text-sm text-white">
+            Zdjęcie wkrótce – pracujemy nad galerią!
+          </span>
+        </div>
+      }
+    }
+  </div>
+
+  @if (opened() !== null) {
+    <div class="fixed inset-0 z-[60] grid place-items-center bg-black/70 backdrop-blur"
+         (click)="close()">
+      <figure class="relative max-h-[90vh] max-w-[95vw] p-2">
+
+        @if (opened(); as current) {
+          <img
+            [src]="current"
+            class="max-h-full max-w-full rounded-2xl shadow-xl"
+            alt="enlarged image"/>
+        } @else {
+          <div
+            (click)="$event.stopPropagation()"
+            class="h-100 w-100 flex-shrink-0 rounded-xl shadow-md relative
+             flex items-center justify-center text-center snap-start"
+               style="background: var(--background-2)">
+            <img src="assets/gallery.png" alt="gallery" class="w-20 mb-20 mx-auto"/>
+            <span class="absolute bottom-25 left-1/2 -translate-x-1/2 text-sm text-white">
+            Zdjęcie wkrótce – pracujemy nad galerią!
+          </span>
+          </div>
+        }
+
+        <button
+          type="button"
+          (click)="close()"
+          aria-label="Zamknij"
+          class="absolute -right-4 -top-4 rounded-full bg-white/80 py-2 px-4 cursor-pointer text-black shadow-xl transition hover:scale-110 focus:outline-none">
+          &times;
+        </button>
+      </figure>
+    </div>
+  }
+
+</section>
