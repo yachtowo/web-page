@@ -1,48 +1,51 @@
-traefik:
-  image: traefik:latest
-  restart: always
-  security_opt:
-    - no-new-privileges:true
-  container_name: traefik
-  ports:
-    - "443:443"
-    - "80:80"
-  command:
-    - --log.level=DEBUG
-    - --providers.docker=true
-    - --providers.docker.exposedbydefault=false
-    - --entrypoints.web.address=:80
-    - --entrypoints.web.http.redirections.entryPoint.to=webs
-    - --entrypoints.web.http.redirections.entryPoint.scheme=https
-    - --entrypoints.web.http.redirections.entrypoint.permanent=true
-    - --entrypoints.webs.address=:443
-    - "--serverstransport.insecureskipverify=true"
-    - "--entrypoints.webs.http.tls.certResolver=cfresolver"
-    - "--entrypoints.webs.http.tls.domains[0].main=yachoto.com"
-    - "--entrypoints.webs.http.tls.domains[0].sans=*.yachtowo.com"
-    - "--certificatesresolvers.cfresolver.acme.dnschallenge=true"
-    - "--certificatesresolvers.cfresolver.acme.dnschallenge.delayBeforeCheck=120s"
-    - "--certificatesresolvers.cfresolver.acme.dnschallenge.provider=cloudflare"
-    - "--certificatesresolvers.cfresolver.acme.dnschallenge.disablePropagationCheck=true"
-    - "--certificatesresolvers.cfresolver.acme.email=AREKS-CLOUDFLARE-EMAIL!"
-    - "--certificatesresolvers.cfresolver.acme.storage=/letsencrypt/acme.json"
-  volumes:
-    - "/var/run/docker.sock:/var/run/docker.sock"
-    - "./letsencrypt:/letsencrypt"
-  environment:
-    - CLOUDFLARE_EMAIL=AREKS-CLOUDFLARE-EMAIL!
-    - CLOUDFLARE_API_KEY=YOUR_KEY
-angular-app:
-  build: .
-  volumes:
-    - .:/usr/src/app
-    - /usr/src/app/node_modules
-  environment:
-    - NODE_ENV=development
-  command: ng serve --host 0.0.0.0 --disable-host-check
-  labels:
-    - "traefik.enable=true"
-    - "traefik.http.routers.angular.entrypoints=webs"
-    - "traefik.http.routers.angular.rule=Host(yachtowo.com)"
-    - "traefik.http.services.angular.loadbalancer.server.port=4200"
-    - "traefik.http.services.angular.loadbalancer.server.scheme=http"
+version: "3.9"
+services:
+  traefik:
+    image: traefik:latest
+    restart: always
+    security_opt:
+      - no-new-privileges:true
+    container_name: traefik
+    ports:
+      - "443:443"
+      - "80:80"
+    command:
+      - --log.level=DEBUG
+      - --providers.docker=true
+      - --providers.docker.exposedbydefault=false
+      - --entrypoints.web.address=:80
+      - --entrypoints.web.http.redirections.entryPoint.to=webs
+      - --entrypoints.web.http.redirections.entryPoint.scheme=https
+      - --entrypoints.web.http.redirections.entrypoint.permanent=true
+      - --entrypoints.webs.address=:443
+      - --serverstransport.insecureskipverify=true
+      - --entrypoints.webs.http.tls.certResolver=cfresolver
+      - --entrypoints.webs.http.tls.domains[0].main=yachoto.com
+      - --entrypoints.webs.http.tls.domains[0].sans=*.yachtowo.com
+      - --certificatesresolvers.cfresolver.acme.dnschallenge=true
+      - --certificatesresolvers.cfresolver.acme.dnschallenge.delayBeforeCheck=120s
+      - --certificatesresolvers.cfresolver.acme.dnschallenge.provider=cloudflare
+      - --certificatesresolvers.cfresolver.acme.dnschallenge.disablePropagationCheck=true
+      - --certificatesresolvers.cfresolver.acme.email=AREKS-CLOUDFLARE-EMAIL!
+      - --certificatesresolvers.cfresolver.acme.storage=/letsencrypt/acme.json
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "./letsencrypt:/letsencrypt"
+    environment:
+      - CLOUDFLARE_EMAIL=AREKS-CLOUDFLARE-EMAIL!
+      - CLOUDFLARE_API_KEY=YOUR_KEY
+
+  angular-app:
+    build: .
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      - NODE_ENV=development
+    command: ng serve --host 0.0.0.0 --disable-host-check
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.angular.entrypoints=webs"
+      - "traefik.http.routers.angular.rule=Host(`yachtowo.com`)"
+      - "traefik.http.services.angular.loadbalancer.server.port=4200"
+      - "traefik.http.services.angular.loadbalancer.server.scheme=http"
