@@ -26,14 +26,14 @@ services:
       - --certificatesresolvers.cfresolver.acme.dnschallenge.delayBeforeCheck=120s
       - --certificatesresolvers.cfresolver.acme.dnschallenge.provider=cloudflare
       - --certificatesresolvers.cfresolver.acme.dnschallenge.disablePropagationCheck=true
-      - --certificatesresolvers.cfresolver.acme.email=AREKS-CLOUDFLARE-EMAIL!
+      - --certificatesresolvers.cfresolver.acme.email=biuro@yachtowo.com
       - --certificatesresolvers.cfresolver.acme.storage=/letsencrypt/acme.json
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
       - "./letsencrypt:/letsencrypt"
     environment:
-      - CLOUDFLARE_EMAIL=AREKS-CLOUDFLARE-EMAIL!
-      - CLOUDFLARE_API_KEY=YOUR_KEY
+      - CLOUDFLARE_EMAIL=biuro@yachtowo.com
+      - CLOUDFLARE_API_KEY=Ssvzf7hzMOVdHW4g7tUIo0i6_tMb7TSEmM0kF7ca
 
   angular-app:
     build: .
