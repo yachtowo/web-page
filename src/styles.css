@@ -1,23 +1,11 @@
 @import 'tailwindcss';
 
-
 .h-full-minus-header {
-  height: 900px;
+  min-height: 650px;
 }
 
 .h-full-minus-header-minus-services {
-  height: 600px;
-}
-
-@media (min-width: 1280px) {
-  .h-full-minus-header {
-    height: 900px;
-  }
-
-  .h-full-minus-header-minus-services {
-    height: 600px;
-
-  }
+  min-height: 600px;
 }
 
 .main-font {
